@@ -1,0 +1,24 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="@routes.Assets.at("template/css/style.min.css")" rel="stylesheet">
+       <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("template/css/imgeffect.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("template/css/magnific-popup.css")" rel="stylesheet">
+        <!-- <link href="@routes.Assets.at("template/css/style.min.css")" rel="stylesheet">-->
+
+        <title>@title</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
+
+    </head>
+    <body>
+        @content
+    </body>
+</html>
