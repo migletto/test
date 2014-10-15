@@ -8,6 +8,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
+import views.html.dashboard;
 
 import java.util.List;
 
@@ -29,5 +30,10 @@ public class Application extends Controller {
         return ok(Json.toJson(persons));
 
     }
+
+    public static Result dashboard(){
+       return ok(dashboard.render("Teste"));
+    }
+
 
 }
