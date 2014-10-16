@@ -13,3 +13,5 @@ GET		/persons					controllers.Application.gerPersons()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /dashboard                   controllers.Application.dashboard()
+
+GET     /businesscases               controllers.Application.businesscases()
