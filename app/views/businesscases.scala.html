@@ -42,7 +42,7 @@
 
 
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/prettify.css")">
-<link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet">
+<link href="@routes.Assets.at("stylesheets/bootstrap.wizard.css")" rel="stylesheet">
 
 <script>
     $(document).ready(function() {
@@ -64,6 +64,16 @@
             var $current = index+1;
             var $percent = ($current/$total) * 100;
             $('#rootwizard').find('.bar').css({width:$percent+'%'});
+
+            // If it's the last tab then hide the last button and show the finish instead
+            if($current >= $total) {
+                $('#rootwizard').find('.pager .next').hide();
+                $('#rootwizard').find('.pager .finish').show();
+                $('#rootwizard').find('.pager .finish').removeClass('disabled');
+            } else {
+                $('#rootwizard').find('.pager .next').show();
+                $('#rootwizard').find('.pager .finish').hide();
+            }
         }});
         $('#rootwizard .finish').click(function() {
             alert('Finished!, Starting over!');
