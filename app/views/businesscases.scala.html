@@ -40,18 +40,102 @@
 <script type="text/javascript" src='@routes.Assets.at("javascripts/bootstrap.min.js")'></script>
 
 
-
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/prettify.css")">
 
 <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-date.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/site.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-multiselect.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrapValidator.min.css")">
+<link rel="stylesheet" type="text/css" media="screen"
+      href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+
+<script type="text/javascript" src='@routes.Assets.at("javascripts/moment.js")'></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/bootstrap-multiselect.js")'></script>
+<script type="text/javascript" src='@routes.Assets.at("javascripts/bootstrapValidator.min.js")'></script>
+
+<script type="text/javascript"
+        src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/src/js/bootstrap-datetimepicker.js"></script>
+
+
+        <!-- Datepicker-->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker5').datetimepicker({
+            pickTime: false
+        });
+    });
+</script>
+
+        <!-- Type-->
 
 <script>
     $(document).ready(function() {
-        $('#rootwizard').bootstrapWizard({onNext: function(tab, navigation, index) {
-            if(index==2) {
+        $('#multiselectForm')
+                .find('[name="type"]')
+                .multiselect()
+                .end()
+                .find('[name="browsers"]')
+                .multiselect({
+                    // Re-validate the multiselect field when it is changed
+                    onChange: function(element, checked) {
+                        $('#multiselectForm').bootstrapValidator('revalidateField', 'browsers');
+                    }
+                })
+                .end()
+                .bootstrapValidator({
+                    // Exclude only disabled fields
+                    // The invisible fields set by Bootstrap Multiselect must be validated
+                    excluded: ':disabled',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        type: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The type is required'
+                                }
+                            }
+                        },
+                        browsers: {
+                            validators: {
+                                callback: {
+                                    message: 'Please choose 2-3 browsers you use for developing',
+                                    callback: function(value, validator) {
+                                        // Get the selected options
+                                        var options = validator.getFieldElements('browsers').val();
+                                        return (options != null
+                                                && options.length >= 2 && options.length <= 3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#type').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering: true
+        });
+    });
+</script>
+
+        <!-- TYPE--->
+
+
+<script>
+    $(document).ready(function () {
+        $('#rootwizard').bootstrapWizard({onNext: function (tab, navigation, index) {
+            if (index == 2) {
                 // Make sure we entered the name
-                if(!$('#name').val()) {
+                if (!$('#name').val()) {
                     alert('You must enter your name');
                     $('#name').focus();
                     return false;
@@ -61,14 +145,14 @@
             // Set the name for the next tab
             $('#tab3').html('Hello, ' + $('#name').val());
 
-        }, onTabShow: function(tab, navigation, index) {
+        }, onTabShow: function (tab, navigation, index) {
             var $total = navigation.find('li').length;
-            var $current = index+1;
-            var $percent = ($current/$total) * 100;
-            $('#rootwizard').find('.bar').css({width:$percent+'%'});
+            var $current = index + 1;
+            var $percent = ($current / $total) * 100;
+            $('#rootwizard').find('.bar').css({width: $percent + '%'});
 
             // If it's the last tab then hide the last button and show the finish instead
-            if($current >= $total) {
+            if ($current >= $total) {
                 $('#rootwizard').find('.pager .next').hide();
                 $('#rootwizard').find('.pager .finish').show();
                 $('#rootwizard').find('.pager .finish').removeClass('disabled');
@@ -77,14 +161,13 @@
                 $('#rootwizard').find('.pager .finish').hide();
             }
         }});
-        $('#rootwizard .finish').click(function() {
+        $('#rootwizard .finish').click(function () {
             alert('Finished!, Starting over!');
             $('#rootwizard').find("a[href*='tab1']").trigger('click');
         });
         window.prettyPrint && prettyPrint()
     });
 </script>
-
 
 
 <div class='container'>
@@ -118,28 +201,52 @@
                     <div class="tab-pane" id="tab1">
                         <div class="row">
                             <div class="col-xs-12 col-md-8">
-                                <label>Área</label>
-                                <input type="text" class="form-control" placeholder="Área">
+                                <label>Area</label>
+                                <input type="text" class="form-control" placeholder="Area">
                             </div>
+
+
+
+                            <div class="col-xs-12 col-md-8">
+                                <label>Type</label>
+                                <select class="form-control" id="type" name="type" multiple="multiple">
+                                    <option value="negocio">Negócio</option>
+                                    <option value="reducaocustos">Redução de Custo</option>
+                                    <option value="eficiencia">Eficiência</option>
+                                    <option value="conformidade">Conformidade</option>
+                                </select>
+                            </div>
+
+
+
                             <div class="col-xs-6 col-md-4">
+                                <label>Date</label>
+
                                 <div class='input-group date' id='datetimepicker5'>
                                     <input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
-					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-calendar"></span>
-					</span>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
+                            </div>
+                            <div class="col-xs-12 col-md-8">
+                                <label>Request Name</label>
+                                <input type="text" class="form-control" placeholder="Request Name">
+                            </div>
+                            <div class="col-xs-12 col-md-8">
+                                <label>Interlocutor</label>
+                                <input type="text" class="form-control" placeholder="Interlocutor">
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="tab2">
 
 
-
-<!--
-                        <p>
-                            <input type='text' name='name' id='name' placeholder='Enter Your Name'>
-                        </p>
-                        -->
+                        <!--
+                                                <p>
+                                                    <input type='text' name='name' id='name' placeholder='Enter Your Name'>
+                                                </p>
+                                                -->
                     </div>
                     <div class="tab-pane" id="tab3">
                         3
@@ -165,9 +272,6 @@
                     </ul>
                 </div>
             </div>
-
-
-
 
 
         </section>
